@@ -12,8 +12,7 @@ const newProduct = productManager.create({
     stock: 50,
 });
 
-console.log(productManager.read());
-console.log(productManager.readOne(newProduct.id));
+console.log(productManager.readFile())
 
 //////////////
 
@@ -25,7 +24,8 @@ const newUser = userManager.create({
     email: "santiago_torres@gmail.com",
 });
   
-console.log(userManager.read());
-console.log(userManager.readOne(newUser.id));
+// console.log(userManager.read());
+// console.log(userManager.readOne(newUser.id));
+
 
 

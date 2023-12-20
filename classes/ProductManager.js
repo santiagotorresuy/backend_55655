@@ -1,10 +1,23 @@
+const fs = require("fs")
+
 class ProductManager {
     #products;
+    path
+
 
     constructor() {
       this.#products = [];
+      this.path = process.cwd() + "/files/products.json";
     }  
+
+    read() {
+        return this.#products;
+    }
   
+    readOne(id) {
+        return this.#products.find(product => product.id === id);
+    }
+
     create(prod) {
         const newProduct = {
             id: this.#generateId(),
@@ -18,12 +31,75 @@ class ProductManager {
         return newProduct;
     }
   
-    read() {
-        return this.#products;
+    async readFile() {
+        try {
+            if(fs.existsSync(this.path)){
+                const data = await fs.promises.readFile(this.path, 'utf-8');
+                const productsFromJSON = JSON.parse(data);
+                return productsFromJSON
+            }
+            return []
+        } catch (err) {
+            console.log(err);
+        }
     }
-  
-    readOne(id) {
-        return this.#products.find(product => product.id === id);
+
+    async addProduct(product){
+        const {title, price, thumbnail, code, stock} = product
+        const productByCode = this.#products.find(prod => prod.code === code)
+            
+        try{
+            if(productByCode){
+                console.log("El producto ya existe");
+            }else{
+                const newProduct = {
+                    id: this.#generateId,
+                    title,
+                    price,  
+                    thumbnail,
+                    code,
+                    stock 
+                } 
+                this.#products.push(newProduct);
+                
+                await fs.promises.readFile(this.path, "utf-8")
+                const productsJSON = JSON.stringify(this.#products) 
+                await fs.promises.writeFile(this.path, productsJSON);
+    
+                return newProduct;
+            }
+        }catch (error){
+            console.log(error);
+        }
+    }
+
+    async deleteProduct(id){
+        try{
+            const newArrayProducts = this.#products.filter(product => product.id !== id)
+            this.#products = newArrayProducts
+
+            fs.promises.writeFile(this.path, JSON.stringify(this.#products))
+
+            console.log(this.#products)
+        }catch(error){
+            console.log(error)
+        }
+    }
+
+    async updateProduct(id, property, newValue){
+        const product = this.#products.find(prod => prod.id === id);
+       
+        try{
+            if(product){
+                product[property]= newValue;
+                const productsJSON = JSON.stringify(this.#products)
+                await fs.promises.writeFile(this.path, productsJSON)
+            }else{
+                console.log("Not found")
+            }
+        }catch(error){
+            console.log(error)
+        }
     }
   
     #generateId() {
