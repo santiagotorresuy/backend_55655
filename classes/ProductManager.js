@@ -86,21 +86,7 @@ class ProductManager {
         }
     }
 
-    async updateProduct(id, property, newValue){
-        const product = this.#products.find(prod => prod.id === id);
-       
-        try{
-            if(product){
-                product[property]= newValue;
-                const productsJSON = JSON.stringify(this.#products)
-                await fs.promises.writeFile(this.path, productsJSON)
-            }else{
-                console.log("Not found")
-            }
-        }catch(error){
-            console.log(error)
-        }
-    }
+
   
     #generateId() {
         if (this.#products.length > 0){
