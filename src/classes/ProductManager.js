@@ -4,10 +4,9 @@ class ProductManager {
     #products;
     path
 
-
     constructor() {
       this.#products = [];
-      this.path = process.cwd() + "/files/products.json";
+      this.path =  process.cwd() + "/src/files/products.json";
     }  
 
     read() {
@@ -38,6 +37,7 @@ class ProductManager {
                 const productsFromJSON = JSON.parse(data);
                 return productsFromJSON
             }
+            
             return []
         } catch (err) {
             console.log(err);
@@ -46,22 +46,26 @@ class ProductManager {
 
     async addProduct(product){
         const {title, price, thumbnail, code, stock} = product
-        const productByCode = this.#products.find(prod => prod.code === code)
             
         try{
-            if(productByCode){
+            const productsFs = await fs.promises.readFile(this.path, "utf-8")
+            const productsFiles = JSON.parse(productsFs)
+            
+
+            if(product.code){
                 console.log("El producto ya existe");
             }else{
                 const newProduct = {
                     id: this.#generateId,
+                    status: true,
                     title,
                     price,  
                     thumbnail,
                     code,
-                    stock 
+                    stock
                 } 
                 this.#products.push(newProduct);
-                
+
                 await fs.promises.readFile(this.path, "utf-8")
                 const productsJSON = JSON.stringify(this.#products) 
                 await fs.promises.writeFile(this.path, productsJSON);
@@ -85,8 +89,6 @@ class ProductManager {
             console.log(error)
         }
     }
-
-
   
     #generateId() {
         if (this.#products.length > 0){
