@@ -5,25 +5,35 @@ const UserManager = require("./classes/UserManager")
 
 const productManager = new ProductManager();
 
-const newProduct1 = productManager.create({
+const newProduct1 ={
     title: "Product 1",
     thumbnail: "https://picsum.photos/id/237/200/300",
     price: 300,
     stock: 50,
     code: 1,
-});
+};
 
-const newProduct2 = productManager.create({
+const newProduct2 ={
     title: "Product 2",
     thumbnail: "https://picsum.photos/id/237/200/300",
-    price: 300,
-    stock: 50,
+    price: 400,
+    stock: 20,
     code: 2,
-});
+};
+
+const newProduct3 ={
+    title: "Product 2",
+    thumbnail: "https://picsum.photos/id/237/200/300",
+    price: 400,
+    stock: 20,
+    code: 3,
+};
 
 //console.log(productManager.read())
 //console.log(productManager.readOne(newProduct1.id))
+productManager.addProduct(newProduct1)
 productManager.addProduct(newProduct2)
+
 
 
 //////////////
